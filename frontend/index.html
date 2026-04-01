@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ezequiel Carracedo">
+    <title>Tienda de Camisetas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body onload="init()">
+
+    <header class="header">
+        <h1>Tienda de Camisetas</h1>
+        <a href="carrito.html" class="cart-link">🛒 Carrito</a>
+    </header>
+
+    <section class="filters">
+        <input type="text" id="search" placeholder="Buscar camisetas...">
+
+        <select id="filter-size">
+            <option value="">Talla</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+            <option>XXL</option>
+        </select>
+
+        <select id="filter-color">
+            <option value="">Color</option>
+            <option value="blanco">Blanco</option>
+            <option value="negro">Negro</option>
+            <option value="azul">Azul</option>
+            <option value="mostaza">Mostaza</option>
+        </select>
+
+        <select id="sort">
+            <option value="">Ordenar</option>
+            <option value="precio_asc">Precio asc</option>
+            <option value="precio_desc">Precio desc</option>
+            <option value="nombre_asc">Nombre asc</option>
+            <option value="nombre_desc">Nombre desc</option>
+        </select>
+    </section>
+
+    <main id="product-list" class="product-grid">
+
+    </main>
+    <script src="app.js"></script>
+    <script src="api.js"></script>
+</body>
+
+</html>

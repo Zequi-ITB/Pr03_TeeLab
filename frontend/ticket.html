@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>Ticket de compra</h1>
+</header>
+
+<main class="ticket-container">
+
+    <div class="ticket-info">
+        <p>ID Pedido: <span id="order-id"></span></p>
+        <p>Fecha: <span id="order-date"></span></p>
+        <p>Estado: <span id="order-status"></span></p>
+    </div>
+
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="ticket-items">
+
+        </tbody>
+    </table>
+
+    <h2 class="total">Total: <span id="ticket-total"></span></h2>
+
+</main>
+
+</body>
+</html>
