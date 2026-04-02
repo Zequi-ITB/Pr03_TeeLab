@@ -12,7 +12,7 @@ function init() {
         carregarCamisetes();
     });
 
-      document.getElementById("sort").addEventListener("change", () => {
+    document.getElementById("sort").addEventListener("change", () => {
         carregarCamisetes();
     });
 
@@ -31,7 +31,9 @@ function init() {
 
 //EVENT LISTENERS
 
-
+document.getElementById("add-to-cart").addEventListener("click", () => {
+    let camiseta = document.getElementById()
+})
 
 
 
@@ -68,6 +70,7 @@ function loadTablaCamisetes(datos) {
     for (let camiseta of datos) {
         let div = document.createElement("div");
         div.className = "product-card";
+        div.id = `${camiseta.id}`
         div.innerHTML = `<img src="${Object.values(camiseta.imagenes)[0]}">
     <h3>${camiseta.nombre}</h3>
     <p>${camiseta.descripcion}</p>
@@ -77,7 +80,7 @@ function loadTablaCamisetes(datos) {
         ${crearColores(camiseta).outerHTML}
         <input type="number" min="1" value="1">
     </div>
-    <button class="add-to-cart">Añadir</button>`;
+    <button class="add-to-cart" id = "a${camiseta.id}">Añadir</button>`;
         main.appendChild(div);
 
     }
