@@ -31,9 +31,48 @@ function init() {
 
 //EVENT LISTENERS
 
-document.getElementById("add-to-cart").addEventListener("click", () => {
-    let camiseta = document.getElementById()
-})
+
+
+
+//añadir carrito
+function addToCart(camiseta) {
+    let id = camiseta.dataset.id;
+    let nom = camiseta.querySelector("h3").textContent;
+    let size = camiseta.querySelector(".size").value;
+    let colorSelect = camiseta.querySelector(".color").value;
+    let quantitat = Number(camiseta.querySelector("input").value);
+    let preu = Number(camiseta.querySelector(".price").textContent);
+
+    let camisetaCarrito = {
+        camisetaId: id,
+        nombre: nom,
+        talla: size,
+        color: colorSelect,
+        cantidad: quantitat,
+        precio: preu
+    }
+
+    saveCart(camisetaCarrito);
+
+
+}
+
+
+function saveCart(camisetaCarrito) {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    carrito.push(camisetaCarrito);
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    console.log(carrito);
+}
+
+function loadCart() {
+
+}
+
+function renderCart() {
+
+}
 
 
 
@@ -70,7 +109,7 @@ function loadTablaCamisetes(datos) {
     for (let camiseta of datos) {
         let div = document.createElement("div");
         div.className = "product-card";
-        div.id = `${camiseta.id}`
+        div.setAttribute("data-id", camiseta.id)
         div.innerHTML = `<img src="${Object.values(camiseta.imagenes)[0]}">
     <h3>${camiseta.nombre}</h3>
     <p>${camiseta.descripcion}</p>
@@ -80,10 +119,27 @@ function loadTablaCamisetes(datos) {
         ${crearColores(camiseta).outerHTML}
         <input type="number" min="1" value="1">
     </div>
-    <button class="add-to-cart" id = "a${camiseta.id}">Añadir</button>`;
+    <button class="add-to-cart" >Añadir</button>`;
         main.appendChild(div);
 
     }
+
+
+    //Agregar a carrito
+    const buttons = document.querySelectorAll(".add-to-cart");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            console.log("enter");
+            const botonClicat = event.target;
+
+            //camiseta
+            const camiseta = botonClicat.closest(".product-card");
+
+            addToCart(camiseta);
+
+        });
+    });
 
 }
 
