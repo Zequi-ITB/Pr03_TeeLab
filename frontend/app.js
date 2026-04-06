@@ -17,12 +17,10 @@ function init() {
     });
 
 
-
     //S'active quan s'escriu qualsevol caracter a la barra de cerca
     document.getElementById("search").addEventListener("input", () => {
         carregarCamisetes();
     });
-
 
 
     carregarCamisetes();
