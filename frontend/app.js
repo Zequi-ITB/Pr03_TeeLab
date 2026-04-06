@@ -1,8 +1,21 @@
 
-
+let timeout;
 
 //INIT
 function init() {
+    // Si estem a la pàgina principal
+    if (document.getElementById("product-list")) {
+        initTienda();
+    }
+
+    // Si estem al carrito
+    if (document.getElementById("cart-items")) {
+        initCarrito();
+    }
+}
+
+
+function initTienda() {
     //S'activen quan detecta qualsevol canvi de valor en els selects dels menus desplegables dels filtres
     document.getElementById("filter-size").addEventListener("change", () => {
         carregarCamisetes();
@@ -19,20 +32,48 @@ function init() {
 
     //S'active quan s'escriu qualsevol caracter a la barra de cerca
     document.getElementById("search").addEventListener("input", () => {
-        carregarCamisetes();
+        clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            carregarCamisetes();
+        }, 300);
+
     });
 
 
     carregarCamisetes();
 }
 
-
-//EVENT LISTENERS
-
+function initCarrito() {
 
 
+    document.getElementById("clear-cart").addEventListener("click", () => {
+        clearCart()
+        renderCart()
+    });
 
-//añadir carrito
+    renderCart();
+
+}
+
+function clearCart() {
+    localStorage.removeItem("carrito");
+
+}
+
+function removeItem(id) {
+    let carrito = loadCart();
+
+    carrito = carrito.filter(camiseta => camiseta.camisetaId !== id);
+    saveCart(carrito);
+}
+
+
+
+
+
+
+//CARRITO
 function addToCart(camiseta) {
     let id = camiseta.dataset.id;
     let nom = camiseta.querySelector("h3").textContent;
@@ -40,6 +81,7 @@ function addToCart(camiseta) {
     let colorSelect = camiseta.querySelector(".color").value;
     let quantitat = Number(camiseta.querySelector("input").value);
     let preu = Number(camiseta.querySelector(".price").textContent);
+    let image = camiseta.querySelector("img").src;
 
     let camisetaCarrito = {
         camisetaId: id,
@@ -47,29 +89,62 @@ function addToCart(camiseta) {
         talla: size,
         color: colorSelect,
         cantidad: quantitat,
-        precio: preu
+        precio: preu,
+        img: image
     }
 
-    saveCart(camisetaCarrito);
-
-
+    let carrito = loadCart();
+    carrito.push(camisetaCarrito);
+    saveCart(carrito);
 }
 
 
-function saveCart(camisetaCarrito) {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    carrito.push(camisetaCarrito);
+function saveCart(carrito) {
 
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    console.log(carrito);
+
 }
 
 function loadCart() {
-
+    return JSON.parse(localStorage.getItem("carrito")) || [];
 }
 
 function renderCart() {
+    let tableBody = document.getElementById("cart-items");
+    tableBody.innerHTML = "";
 
+    let carrito = loadCart();
+    for (let camiseta of carrito) {
+        let fila = document.createElement("tr");
+        //div.className = "product-card";
+        //div.setAttribute("data-id", camiseta.id)
+        fila.innerHTML = `<td> 
+            <img src="${camiseta.img}" class="cart-img">
+            <span>${camiseta.nombre}</span>
+    </td>
+    <td>${camiseta.cantidad}</td>
+   <td>${camiseta.precio}</td>
+   <td>${calcularSubtotal(camiseta)}</td>
+    <td> <button class="remove-btn" data-id="${camiseta.camisetaId}">Eliminar</button></td>`;
+        tableBody.appendChild(fila);
+
+    }
+
+
+    document.querySelectorAll(".remove-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            console.log("entro");
+            const id = e.target.dataset.id;
+            console.log(id);
+            removeItem(id);
+            renderCart();
+        });
+    });
+
+}
+
+function calcularSubtotal(camiseta) {
+    return Number(camiseta.precio * camiseta.cantidad);
 }
 
 
@@ -123,12 +198,12 @@ function loadTablaCamisetes(datos) {
     }
 
 
-    //Agregar a carrito
+    //Event listener del boto "afegir al carrito" es a dins de load tabla perque sino, se executa abans de que es carreguin els productes i per tant, no troba els buttons de "add-to-cart".
     const buttons = document.querySelectorAll(".add-to-cart");
 
     buttons.forEach(button => {
         button.addEventListener("click", (event) => {
-            console.log("enter");
+
             const botonClicat = event.target;
 
             //camiseta
