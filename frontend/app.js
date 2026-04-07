@@ -12,6 +12,13 @@ function init() {
     if (document.getElementById("cart-items")) {
         initCarrito();
     }
+
+    if (document.getElementById("ticket-items")) {
+        let ticket = JSON.parse(localStorage.getItem("ticket"));
+        if (ticket) {
+            renderTicket(ticket.comanda);
+        }
+    }
 }
 
 
@@ -52,6 +59,12 @@ function initCarrito() {
         renderCart()
     });
 
+    document.getElementById("checkout").addEventListener("click", () => {
+        console.log("enter");
+        finalizarCompra();
+
+    })
+
     renderCart();
 
 }
@@ -66,6 +79,60 @@ function removeItem(id) {
 
     carrito = carrito.filter(camiseta => camiseta.camisetaId !== id);
     saveCart(carrito);
+}
+
+async function finalizarCompra() {
+    let comanda = {
+        "cliente": { "nombre": "Ezequiel", "email": "ezequiel@mail.com" },
+        "direccion": { "calle": "Carrer Major 1", "cp": "08400", "ciudad": "Granollers" },
+        "items": loadCart()
+    }
+    try {
+        let confirm = await createComanda(comanda);
+        if (confirm) {
+            localStorage.setItem("ticket", JSON.stringify(confirm));
+            window.location.href = "ticket.html";
+
+        }
+        else console.error("ERROR AL CERRAR CARRITO");
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+
+function renderTicket(ticket) {
+    console.log("TICKET:", ticket);
+    let orderId = document.getElementById("order-id");
+    orderId.innerHTML = ticket.id;
+
+    let fecha = document.getElementById("order-date");
+    fecha.innerHTML = ticket.fecha;
+
+    let estado = document.getElementById("order-status");
+    estado.innerHTML = ticket.estado;
+
+
+    let tableBody = document.getElementById("ticket-items");
+    tableBody.innerHTML = "";
+
+
+    for (let camiseta of ticket.items) {
+        let fila = document.createElement("tr");
+        //div.className = "product-card";
+        //div.setAttribute("data-id", camiseta.id)
+        fila.innerHTML = `<td> 
+            <span>${camiseta.camisetaId}</span>
+            <span>${camiseta.nombre}</span>
+    </td>
+    <td>
+    <span> ${camiseta.cantidad}</span>
+    </td>
+   <td>${camiseta.precioUnitario}</td>
+   <td>${camiseta.subtotal}</td>`;
+        tableBody.appendChild(fila);
+
+    }
 }
 
 
@@ -84,6 +151,7 @@ function addToCart(camiseta) {
     let image = camiseta.querySelector("img").src;
 
     let camisetaCarrito = {
+
         camisetaId: id,
         nombre: nom,
         talla: size,
@@ -122,7 +190,9 @@ function renderCart() {
             <img src="${camiseta.img}" class="cart-img">
             <span>${camiseta.nombre}</span>
     </td>
-    <td>${camiseta.cantidad}</td>
+    <td>
+    <input type="number" min="1" value="${camiseta.cantidad}">
+    </td>
    <td>${camiseta.precio}</td>
    <td>${calcularSubtotal(camiseta)}</td>
     <td> <button class="remove-btn" data-id="${camiseta.camisetaId}">Eliminar</button></td>`;
@@ -131,11 +201,12 @@ function renderCart() {
     }
 
 
+
     document.querySelectorAll(".remove-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
-            console.log("entro");
+
             const id = e.target.dataset.id;
-            console.log(id);
+
             removeItem(id);
             renderCart();
         });

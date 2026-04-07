@@ -18,3 +18,23 @@ async function getAllCamisetes(size, color, search, sort) {
         console.error("Error:", error);
     }
 }
+
+
+async function createComanda(comanda) {
+    let url = `${API_COMANDAS}`
+    try {
+         const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(comanda)
+        });
+        if (!res.ok) {
+            throw new Error(`Error HTTP ${res.status}`);
+        }
+
+        return await res.json();
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
