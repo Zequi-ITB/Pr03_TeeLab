@@ -60,7 +60,7 @@ function initCarrito() {
     });
 
     document.getElementById("checkout").addEventListener("click", () => {
-        console.log("enter");
+
         finalizarCompra();
 
     })
@@ -91,10 +91,10 @@ async function finalizarCompra() {
         let confirm = await createComanda(comanda);
         if (confirm) {
             localStorage.setItem("ticket", JSON.stringify(confirm));
+            clearCart();
             window.location.href = "ticket.html";
-
         }
-        else console.error("ERROR AL CERRAR CARRITO");
+        else alert("comanda vacia")
     } catch (error) {
         alert(error.message);
     }
@@ -102,7 +102,7 @@ async function finalizarCompra() {
 
 
 function renderTicket(ticket) {
-    console.log("TICKET:", ticket);
+
     let orderId = document.getElementById("order-id");
     orderId.innerHTML = ticket.id;
 
@@ -112,6 +112,8 @@ function renderTicket(ticket) {
     let estado = document.getElementById("order-status");
     estado.innerHTML = ticket.estado;
 
+    
+
 
     let tableBody = document.getElementById("ticket-items");
     tableBody.innerHTML = "";
@@ -119,7 +121,7 @@ function renderTicket(ticket) {
     let total = document.getElementById("ticket-total");
     let totalSuma = 0;
     for (let camiseta of ticket.items) {
-        totalSuma+=camiseta.subtotal;
+        totalSuma += camiseta.subtotal;
         let fila = document.createElement("tr");
         //div.className = "product-card";
         //div.setAttribute("data-id", camiseta.id)
@@ -166,8 +168,18 @@ function addToCart(camiseta) {
         img: image
     }
 
+
     let carrito = loadCart();
-    carrito.push(camisetaCarrito);
+
+    //Mirem que no estigui repetit i sumem les quantitats
+    const itemEncontrado = carrito.find(item => item.camisetaId === id);
+
+    if (itemEncontrado) {
+        itemEncontrado.cantidad += camisetaCarrito.cantidad;
+    } else {
+        carrito.push(camisetaCarrito);
+    }
+
     saveCart(carrito);
 }
 
@@ -186,6 +198,9 @@ function renderCart() {
     let tableBody = document.getElementById("cart-items");
     tableBody.innerHTML = "";
 
+    let total = 0;
+
+
     let carrito = loadCart();
     for (let camiseta of carrito) {
         let fila = document.createElement("tr");
@@ -202,8 +217,10 @@ function renderCart() {
    <td>${calcularSubtotal(camiseta)}</td>
     <td> <button class="remove-btn" data-id="${camiseta.camisetaId}">Eliminar</button></td>`;
         tableBody.appendChild(fila);
+        total += calcularSubtotal(camiseta);
 
     }
+    document.getElementById("total-price").textContent = total;
 
 
 

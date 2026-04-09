@@ -4,8 +4,12 @@ body {
     background: #f5f5f5;
 }
 
-#volverTienda{
+#volverTienda {
     color: #000000;
+}
+
+#volver {
+    color: white;
 }
 
 /* HEADER */
@@ -102,7 +106,7 @@ body {
 
 
 
-/* CARRITO */ 
+/* CARRITO */
 .cart-container {
     padding: 20px;
 }
@@ -155,7 +159,7 @@ body {
 }
 
 
-/* TICKET */ 
+/* TICKET */
 
 .ticket-container {
     padding: 20px;
