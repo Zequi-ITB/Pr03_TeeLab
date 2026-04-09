@@ -116,8 +116,10 @@ function renderTicket(ticket) {
     let tableBody = document.getElementById("ticket-items");
     tableBody.innerHTML = "";
 
-
+    let total = document.getElementById("ticket-total");
+    let totalSuma = 0;
     for (let camiseta of ticket.items) {
+        totalSuma+=camiseta.subtotal;
         let fila = document.createElement("tr");
         //div.className = "product-card";
         //div.setAttribute("data-id", camiseta.id)
@@ -129,10 +131,13 @@ function renderTicket(ticket) {
     <span> ${camiseta.cantidad}</span>
     </td>
    <td>${camiseta.precioUnitario}</td>
-   <td>${camiseta.subtotal}</td>`;
+   <td>${Number(camiseta.subtotal).toFixed(2)}</td>`;
         tableBody.appendChild(fila);
 
     }
+    total.textContent = Number(totalSuma).toFixed(2);
+
+
 }
 
 
