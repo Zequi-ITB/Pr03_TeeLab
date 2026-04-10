@@ -58,12 +58,12 @@ Camisetas
 
 Comandas (pedidos)
 - POST `/api/comandas`
-  - Crear una comanda. Body esperado (ejemplo):
+  - Crear una comanda. Body esperado:
 
 ```json
 {
   "cliente": { "nombre": "Juan", "email": "juan@ejemplo.com" },
-  "direccion": "C/ Exemple 1, 08000",
+  "direccion": { "calle": "Carrer Major 1", "cp": "08400", "ciudad": "Granollers" },
   "items": [
     { "camisetaId": "TSH01", "nombre": "MACACARENA", "talla": "M", "color": "negro", "cantidad": 2, "precio": 19.95 }
   ]
