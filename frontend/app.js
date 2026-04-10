@@ -100,7 +100,7 @@ async function finalizarCompra() {
     }
 }
 
-
+//TICKET
 function renderTicket(ticket) {
 
     let orderId = document.getElementById("order-id");
@@ -112,8 +112,6 @@ function renderTicket(ticket) {
     let estado = document.getElementById("order-status");
     estado.innerHTML = ticket.estado;
 
-    
-
 
     let tableBody = document.getElementById("ticket-items");
     tableBody.innerHTML = "";
@@ -123,9 +121,8 @@ function renderTicket(ticket) {
     for (let camiseta of ticket.items) {
         totalSuma += camiseta.subtotal;
         let fila = document.createElement("tr");
-        //div.className = "product-card";
-        //div.setAttribute("data-id", camiseta.id)
         fila.innerHTML = `<td> 
+            <img src="${camiseta.img}" class="cart-img">
             <span>${camiseta.camisetaId}</span>
             <span>${camiseta.nombre}</span>
     </td>
@@ -194,6 +191,8 @@ function loadCart() {
     return JSON.parse(localStorage.getItem("carrito")) || [];
 }
 
+
+
 function renderCart() {
     let tableBody = document.getElementById("cart-items");
     tableBody.innerHTML = "";
@@ -203,9 +202,9 @@ function renderCart() {
 
     let carrito = loadCart();
     for (let camiseta of carrito) {
+        let subtotal = calcularSubtotal(camiseta)
         let fila = document.createElement("tr");
-        //div.className = "product-card";
-        //div.setAttribute("data-id", camiseta.id)
+
         fila.innerHTML = `<td> 
             <img src="${camiseta.img}" class="cart-img">
             <span>${camiseta.nombre}</span>
@@ -214,13 +213,14 @@ function renderCart() {
     <input type="number" min="1" value="${camiseta.cantidad}">
     </td>
    <td>${camiseta.precio}</td>
-   <td>${calcularSubtotal(camiseta)}</td>
+   <td>${subtotal.toFixed(2)}</td>
     <td> <button class="remove-btn" data-id="${camiseta.camisetaId}">Eliminar</button></td>`;
         tableBody.appendChild(fila);
-        total += calcularSubtotal(camiseta);
+        total += subtotal;
 
     }
-    document.getElementById("total-price").textContent = total;
+
+    document.getElementById("total-price").textContent = total.toFixed(2);
 
 
 

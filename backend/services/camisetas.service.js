@@ -6,26 +6,26 @@ const existsId = (id) => productosJSON.some(s => s.id === id);
 
 
 export function getAll(req) {
-
+let llistaFiltrada = productosJSON;
   if (req.query.talla) {
-    return productosJSON.filter(camiseta => camiseta.tallas.some(talla => talla === req.query.talla));
+    llistaFiltrada= productosJSON.filter(camiseta => camiseta.tallas.some(talla => talla === req.query.talla));
   }
   if (req.query.color) {
-    return productosJSON.filter(camiseta => camiseta.colores.some(color => color === req.query.color));
+    llistaFiltrada =  productosJSON.filter(camiseta => camiseta.colores.some(color => color === req.query.color));
   }
   if (req.query.tag) {
-    return productosJSON.filter(camiseta => camiseta.tags.some(tag => tag === req.query.tag));
+    llistaFiltrada = productosJSON.filter(camiseta => camiseta.tags.some(tag => tag === req.query.tag));
   }
   if (req.query.q) {
     const textEscapat = escaparRegex(req.query.q);
     const regex = new RegExp(textEscapat, "i");
-    const resultats = productosJSON.filter(camiseta => {
+    const llistaFiltrada = productosJSON.filter(camiseta => {
       return regex.test(String(camiseta.nombre || ""));
     })
-    return resultats;
+    return llistaFiltrada;
   }
 
-  return productosJSON;
+  return llistaFiltrada;
 }
 
 export function sortCamisetes(sort, camisetas) {
