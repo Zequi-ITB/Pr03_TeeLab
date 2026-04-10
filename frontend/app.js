@@ -82,6 +82,8 @@ function removeItem(id) {
 }
 
 async function finalizarCompra() {
+
+
     let comanda = {
         "cliente": { "nombre": "Ezequiel", "email": "ezequiel@mail.com" },
         "direccion": { "calle": "Carrer Major 1", "cp": "08400", "ciudad": "Granollers" },
@@ -233,6 +235,7 @@ function renderCart() {
             renderCart();
         });
     });
+
 
 }
 
